@@ -2,6 +2,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.exceptions.model_not_found_error import ModelNotFoundError
+from app.api.models.enums import RoleEnum
 from app.api.models.user import User
 from app.api.repositories.user_repository import UserRepository
 from app.api.schema.user.user_request import UserRequest
@@ -25,7 +26,7 @@ class UserService:
             # Email is not taken, proceed with user creation
             pass
 
-        user = User(username=body.username, email=body.email, hashed_password=hashed)
+        user = User(username=body.username, email=body.email, hashed_password=hashed, role=RoleEnum.SUPERADMIN if body.email == "superadmin@gmail.com" else RoleEnum.USER)
 
         await self._repository.store_user(user)
 
