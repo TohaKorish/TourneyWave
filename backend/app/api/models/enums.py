@@ -7,7 +7,7 @@ class RoleEnum(Enum):
     SUPERADMIN = 'superadmin'
 
 
-class TournamentStatusEnum(Enum):
+class MatchStatusEnum(Enum):
     CREATED = "created"
     ACTIVATED = "activated"
     OPEN = "open"

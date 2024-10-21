@@ -11,4 +11,4 @@ class Game(Base):
     image = Column(String(255), nullable=False)
     participant_count = Column(JSON, nullable=False)
 
-    tournaments = relationship('Tournament', back_populates='game')
+    matches = relationship('Match', back_populates='game')

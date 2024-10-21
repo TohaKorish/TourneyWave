@@ -10,4 +10,8 @@ class Team(Base):
     name = Column(String(255), nullable=False)
 
     users = relationship('User', back_populates='team')
-    tournament_id = Column(Integer, ForeignKey('tournaments.id'))
+
+    match_id = Column(Integer, ForeignKey('matches.id'))
+    match = relationship('Match', back_populates='teams')
+
+    matchbywinner = relationship('Match', back_populates='winner_team')
