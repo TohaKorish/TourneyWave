@@ -11,4 +11,6 @@ class Game(Base):
     image = Column(String(255), nullable=False)
     participant_count = Column(JSON, nullable=False)
 
+
+    # Зв'язок One-to-Many з Match
     matches = relationship('Match', back_populates='game')

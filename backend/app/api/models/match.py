@@ -13,14 +13,17 @@ class Match(Base):
     status = Column(Enum(MatchStatusEnum), default=MatchStatusEnum.CREATED, nullable=False)
     connection_key = Column(String(255), nullable=False)
     connection_description = Column(Text, nullable=False)
+    stream_url = Column(String(255), nullable=True)
     password = Column(String(30), nullable=True)
 
-    game_id = Column(Integer, ForeignKey('games.id'))
+
+    # Зв'язок Many-to-One з Game
+    game_id = Column(Integer, ForeignKey('games.id'), nullable=False)
     game = relationship('Game', back_populates='matches')
 
-    stream_url = Column(String(255), nullable=True)
-
+    # One-to-Many зв'язок з Team
     teams = relationship('Team', back_populates='match')
 
-    winner_team_id = Column(Integer, ForeignKey('teams.id'), nullable=True)
-    winner_team = relationship('Team', back_populates='matchbywinner')
+    # Зв'язок One-to-One з переможною командою
+    winner_team_id = Column(Integer, ForeignKey('teams.id'))
+    winner_team = relationship('Team', uselist=False, foreign_keys=[winner_team_id])
