@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router';
 import { useJwtStore } from 'stores/jwt-store.js';
 import ProfileDropdown from 'components/ProfileDropdown.vue';
+import {computed} from "vue";
 
 const router = useRouter()
 
@@ -22,7 +23,7 @@ const handleToDashboardClick = () => {
 }
 
 const jwtStore = useJwtStore();
-const isLoggedIn = jwtStore.isAuthenticated;
+const isLoggedIn = computed(() => jwtStore.isAuthenticated);
 </script>
 
 <template>
