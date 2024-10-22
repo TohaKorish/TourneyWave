@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Depends
-from fastapi.security import OAuth2PasswordBearer
+from fastapi import APIRouter
 
 from app.api.depenencies import UserServiceIoC, ValidateTokenIoC
 from app.api.schema.user.user_request import UserRequest
-from app.api.schema.user.user_respone import UserResponse
+from app.api.schema.user.user_response import UserResponse
 
 router = APIRouter(prefix="/api/users", tags=["users"])
 

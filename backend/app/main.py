@@ -5,9 +5,15 @@ from starlette.responses import JSONResponse
 from app.api.db import async_session
 from app.api.routers.user_router import router as user_router
 from app.api.routers.auth_router import router as auth_router
+from app.api.routers.game_router import router as game_router
+from app.api.routers.team_router import router as team_router
+from app.api.routers.match_router import router as match_router
+from app.settings import Settings
 
 app = FastAPI()
 app.sa_sessionmaker = async_session
+
+settings = Settings()
 
 app.add_middleware(
     CORSMiddleware,
@@ -19,6 +25,9 @@ app.add_middleware(
 
 app.include_router(user_router)
 app.include_router(auth_router)
+app.include_router(game_router)
+app.include_router(team_router)
+app.include_router(match_router)
 
 
 @app.exception_handler(ValueError)
