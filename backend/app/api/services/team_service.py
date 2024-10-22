@@ -16,12 +16,6 @@ class TeamService:
         self._user_repository = user_repository
 
     async def create(self, body: TeamRequest) -> Team:
-        try:
-            await self._repository.get_by_name(body.name)
-            raise ValueError("Team with this name already exists")
-        except ModelNotFoundError:
-            pass
-
         members = []
         for member_email in body.members:
             user = await self._user_repository.get_by_email(member_email)

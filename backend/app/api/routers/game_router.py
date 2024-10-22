@@ -5,7 +5,7 @@ from app.api.schema.game.game_request import GameRequest
 from app.api.schema.game.game_response import GameResponse
 
 router = APIRouter(prefix="/api/games", tags=["games"])
-
+# TODO: get all route with search and pagination
 @router.post('/')
 async def create_game(body: GameRequest, service: GameServiceIoC) -> GameResponse:
     game = await service.create(body)

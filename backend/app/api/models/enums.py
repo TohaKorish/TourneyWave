@@ -8,7 +8,6 @@ class RoleEnum(Enum):
 
 
 class MatchStatusEnum(Enum):
-    CREATED = "created"
-    ACTIVATED = "activated"
+    IN_PROGRESS = "in_progress"
     OPEN = "open"
     COMPLETED = "completed"

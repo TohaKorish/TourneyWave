@@ -6,7 +6,6 @@ from app.api.models.enums import MatchStatusEnum
 
 class MatchRequest(BaseModel):
     datetime: datetime
-    status: MatchStatusEnum
     connection_key: str
     connection_description: str
     stream_url: str | None

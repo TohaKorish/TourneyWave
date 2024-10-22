@@ -69,7 +69,6 @@ Content-Type: application/json
 
 {
   "datetime": "2024-10-22T15:00:00",
-  "status": "created",
   "connection_key": "12345",
   "connection_description": "Match description",
   "stream_url": "http://example.com/stream",

@@ -6,6 +6,8 @@ from app.api.schema.match.match_response import MatchResponse
 
 router = APIRouter(prefix="/api/matches", tags=["matches"])
 
+# TODO: get all route with search and pagination (FILTER IN PROCESS GAMES)
+
 @router.post('/')
 async def create_match(body: MatchRequest, service: MatchServiceIoC) -> MatchResponse:
     match = await service.create(body)

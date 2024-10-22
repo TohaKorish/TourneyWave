@@ -48,6 +48,11 @@ class GameService:
         return game
 
     async def delete(self, game_id: int) -> bool:
+        game = await self._repository.get_by_id_with_matches(game_id)
+
+        if len(game.matches) > 0:
+            raise ValueError("Can not delete a game with matches")
+
         is_deleted = await self._repository.delete_game(game_id)
         await self._db.commit()
 

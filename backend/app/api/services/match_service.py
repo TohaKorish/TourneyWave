@@ -13,7 +13,6 @@ class MatchService:
     async def create(self, body: MatchRequest) -> Match:
         match = Match(
             datetime=body.datetime,
-            status=body.status,
             connection_key=body.connection_key,
             connection_description=body.connection_description,
             stream_url=body.stream_url,
@@ -37,7 +36,6 @@ class MatchService:
     async def update(self, body: MatchRequest) -> Match:
         match = await self._repository.get_by_id(body.id)
         match.datetime = body.datetime
-        match.status = body.status
         match.connection_key = body.connection_key
         match.connection_description = body.connection_description
         match.stream_url = body.stream_url

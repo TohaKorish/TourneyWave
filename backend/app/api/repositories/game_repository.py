@@ -1,5 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+
 from app.api.exceptions.model_not_found_error import ModelNotFoundError
 from app.api.models import Game
 
@@ -19,6 +21,15 @@ class GameRepository:
 
     async def get_by_id(self, game_id: int) -> Game:
         stmt = select(Game).where(Game.id == game_id)
+        game = await self._db.scalar(stmt)
+
+        if not game:
+            raise ModelNotFoundError(Game.__tablename__)
+
+        return game
+
+    async def get_by_id_with_matches(self, game_id: int) -> Game:
+        stmt = select(Game).options(selectinload(Game.matches)).where(Game.id == game_id)
         game = await self._db.scalar(stmt)
 
         if not game:
