@@ -5,9 +5,12 @@ from starlette.responses import JSONResponse
 from app.api.db import async_session
 from app.api.routers.user_router import router as user_router
 from app.api.routers.auth_router import router as auth_router
+from app.settings import Settings
 
 app = FastAPI()
 app.sa_sessionmaker = async_session
+
+settings = Settings()
 
 app.add_middleware(
     CORSMiddleware,

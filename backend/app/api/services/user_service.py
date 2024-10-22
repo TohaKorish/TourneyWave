@@ -26,7 +26,7 @@ class UserService:
             # Email is not taken, proceed with user creation
             pass
 
-        user = User(username=body.username, email=body.email, hashed_password=hashed, role=RoleEnum.SUPERADMIN if body.email == "superadmin@gmail.com" else RoleEnum.USER)
+        user = User(username=body.username, email=body.email, hashed_password=hashed, role=RoleEnum.ADMIN if body.email == "admin@gmail.com" else RoleEnum.USER)
 
         await self._repository.store_user(user)
 
