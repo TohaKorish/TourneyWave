@@ -30,7 +30,7 @@ class TeamService:
             else:
                 raise ValueError(f"User with email {member_email} does not exist.")
 
-        team = Team(name=body.name, members=body.members, match_id=body.match_id)
+        team = Team(name=body.name, members=members, match_id=body.match_id)
         await self._repository.store_team(team)
         await self._db.commit()
 
