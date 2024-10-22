@@ -3,8 +3,15 @@ from typing import Annotated
 
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.api.repositories.game_repository import GameRepository
+from app.api.repositories.match_repository import MatchRepository
+from app.api.repositories.team_repository import TeamRepository
 from app.api.repositories.user_repository import UserRepository
 from app.api.services.auth_service import AuthService
+from app.api.services.game_service import GameService
+from app.api.services.match_service import MatchService
+from app.api.services.team_service import TeamService
 from app.api.services.token_service import TokenService
 from app.api.services.user_service import UserService
 from fastapi import Request, Depends
@@ -29,10 +36,34 @@ def get_user_repository(session: AsyncSession = Depends(get_sa_session)) -> User
     return UserRepository(session)
 
 
+def get_game_repository(session: AsyncSession = Depends(get_sa_session)) -> GameRepository:
+    return GameRepository(session)
+
+
+def get_team_repository(session: AsyncSession = Depends(get_sa_session)) -> TeamRepository:
+    return TeamRepository(session)
+
+
+def get_match_repository(session: AsyncSession = Depends(get_sa_session)) -> MatchRepository:
+    return MatchRepository(session)
+
+
 def get_user_service(session: AsyncSession = Depends(get_sa_session),
                      repo: UserRepository = Depends(get_user_repository),
                      crypt: CryptContext = Depends(get_crypt_context)) -> UserService:
     return UserService(session, repo, crypt)
+
+def get_team_service(session: AsyncSession = Depends(get_sa_session),
+                     repo: TeamRepository = Depends(get_team_repository)) -> TeamService:
+    return TeamService(session, repo)
+
+def get_game_service(session: AsyncSession = Depends(get_sa_session),
+                     repo: GameRepository = Depends(get_game_repository)) -> GameService:
+    return GameService(session, repo)
+
+def get_match_service(session: AsyncSession = Depends(get_sa_session),
+                     repo: MatchRepository = Depends(get_match_repository)) -> MatchService:
+    return MatchService(session, repo)
 
 
 def get_auth_service(
@@ -53,6 +84,9 @@ def validate_token(token: Annotated[str, Depends(oauth2_scheme)],
 
 DBSessionIoC = Annotated[AsyncSession, Depends(get_sa_session)]
 UserServiceIoC = Annotated[UserService, Depends(get_user_service)]
+GameServiceIoC = Annotated[GameService, Depends(get_game_service)]
+TeamServiceIoC = Annotated[TeamService, Depends(get_team_service)]
+MatchServiceIoC = Annotated[MatchService, Depends(get_match_service)]
 TokenServiceIoC = Annotated[TokenService, Depends(get_token_service)]
 AuthServiceIoC = Annotated[AuthService, Depends(get_auth_service)]
 ValidateTokenIoC = Annotated[int, Depends(validate_token)]

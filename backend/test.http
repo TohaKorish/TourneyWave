@@ -34,3 +34,63 @@ Content-Type: application/json
 ###
 GET http://localhost:8000/api/users/me
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoidXNlciIsImV4cCI6MTcyOTUzMDk3NX0.zUXC-jZqSVUC-gwPN49qmIWM9C7IKzqOm2_uZwoApcM
+
+
+
+
+
+
+
+
+
+
+
+
+### Тестування ігор
+POST http://localhost:8000/api/games
+Content-Type: application/json
+
+{
+  "name": "Chess",
+  "image": "http://example.com/chess.png",
+  "participant_count": {
+    "min": 2,
+    "max": 2
+  }
+}
+###
+
+GET http://localhost:8000/api/games/1
+###
+
+### Тестування матчів
+POST http://localhost:8000/api/matches
+Content-Type: application/json
+
+{
+  "datetime": "2024-10-22T15:00:00",
+  "status": "CREATED",
+  "connection_key": "12345",
+  "connection_description": "Match description",
+  "stream_url": "http://example.com/stream",
+  "password": "matchpassword",
+  "game_id": 1,
+  "winner_team_id": null
+}
+###
+
+GET http://localhost:8000/api/matches/1
+###
+
+### Тестування команд
+POST http://localhost:8000/api/teams
+Content-Type: application/json
+
+{
+  "name": "Team A",
+  "members": ["testuser@gmail.com", "adminuser@gmail.com"]
+}
+###
+
+GET http://localhost:8000/api/teams/1
+###
