@@ -14,7 +14,7 @@ class Team(Base):
 
     # Зовнішній ключ для зв'язку з Match
     match_id = Column(Integer, ForeignKey('matches.id'))
-    match = relationship('Match', back_populates='teams')
+    match = relationship('Match', back_populates='teams', foreign_keys=[match_id])
 
     # Many-to-Many зв'язок з User
     members = relationship('User', secondary=user_team, back_populates='teams')

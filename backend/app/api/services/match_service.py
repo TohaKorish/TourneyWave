@@ -17,7 +17,8 @@ class MatchService:
             connection_key=body.connection_key,
             connection_description=body.connection_description,
             stream_url=body.stream_url,
-            password=body.password
+            password=body.password,
+            game_id=body.game_id
         )
 
         await self._repository.store_match(match)

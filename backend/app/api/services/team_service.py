@@ -3,15 +3,17 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.exceptions.model_not_found_error import ModelNotFoundError
 from app.api.models import Team
 from app.api.repositories.team_repository import TeamRepository
+from app.api.repositories.user_repository import UserRepository
 
 from app.api.schema.team.team_request import TeamRequest
 from app.api.schema.team.team_response import TeamResponse
 
 
 class TeamService:
-    def __init__(self, db: AsyncSession, repository: TeamRepository):
+    def __init__(self, db: AsyncSession, repository: TeamRepository, user_repository: UserRepository):
         self._db = db
         self._repository = repository
+        self._user_repository = user_repository
 
     async def create(self, body: TeamRequest) -> Team:
         try:
@@ -20,7 +22,15 @@ class TeamService:
         except ModelNotFoundError:
             pass
 
-        team = Team(name=body.name)
+        members = []
+        for member_email in body.members:
+            user = await self._user_repository.get_by_email(member_email)
+            if user:
+                members.append(user)
+            else:
+                raise ValueError(f"User with email {member_email} does not exist.")
+
+        team = Team(name=body.name, members=body.members, match_id=body.match_id)
         await self._repository.store_team(team)
         await self._db.commit()
 

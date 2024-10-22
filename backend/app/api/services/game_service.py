@@ -14,7 +14,7 @@ class GameService:
 
     async def create(self, body: GameRequest) -> Game:
         try:
-            await self._repository.get_by_name(body.email)
+            await self._repository.get_by_name(body.name)
             raise ValueError("Game with this name already exists")
         except ModelNotFoundError:
             # Email is not taken, proceed with user creation

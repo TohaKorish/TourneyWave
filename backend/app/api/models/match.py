@@ -2,6 +2,7 @@ from sqlalchemy import Integer, Column, String, DateTime, Text, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 
 from app.api.db import Base
+from app.api.models import Team
 from app.api.models.enums import MatchStatusEnum
 
 
@@ -22,7 +23,7 @@ class Match(Base):
     game = relationship('Game', back_populates='matches')
 
     # One-to-Many зв'язок з Team
-    teams = relationship('Team', back_populates='match')
+    teams = relationship('Team', back_populates='match', foreign_keys=[Team.match_id])
 
     # Зв'язок One-to-One з переможною командою
     winner_team_id = Column(Integer, ForeignKey('teams.id'))

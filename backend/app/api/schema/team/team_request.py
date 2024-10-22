@@ -6,3 +6,4 @@ from pydantic import BaseModel
 class TeamRequest(BaseModel):
     name: str
     members: List[str]
+    match_id: int

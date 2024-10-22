@@ -69,7 +69,7 @@ Content-Type: application/json
 
 {
   "datetime": "2024-10-22T15:00:00",
-  "status": "CREATED",
+  "status": "created",
   "connection_key": "12345",
   "connection_description": "Match description",
   "stream_url": "http://example.com/stream",
@@ -88,7 +88,8 @@ Content-Type: application/json
 
 {
   "name": "Team A",
-  "members": ["testuser@gmail.com", "adminuser@gmail.com"]
+  "members": ["test@gmail.com", "admin@gmail.com"],
+  "match_id": 1
 }
 ###
 

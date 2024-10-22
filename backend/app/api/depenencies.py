@@ -54,8 +54,9 @@ def get_user_service(session: AsyncSession = Depends(get_sa_session),
     return UserService(session, repo, crypt)
 
 def get_team_service(session: AsyncSession = Depends(get_sa_session),
-                     repo: TeamRepository = Depends(get_team_repository)) -> TeamService:
-    return TeamService(session, repo)
+                     repo: TeamRepository = Depends(get_team_repository),
+                     user_repo: UserRepository = Depends(get_user_repository)) -> TeamService:
+    return TeamService(session, repo, user_repo)
 
 def get_game_service(session: AsyncSession = Depends(get_sa_session),
                      repo: GameRepository = Depends(get_game_repository)) -> GameService:
