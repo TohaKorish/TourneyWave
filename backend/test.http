@@ -81,8 +81,14 @@ Content-Type: application/json
 }
 ###
 
-GET http://localhost:8000/api/matches/1
+GET http://localhost:8000/api/matches
 ###
+
+GET http://localhost:8000/api/matches?status=open
+###
+
+GET http://localhost:8000/api/matches?game_id=1&status=completed
+
 
 ### Тестування команд
 POST http://localhost:8000/api/teams

@@ -34,9 +34,20 @@ class MatchService:
 
         return matches
 
-    async def get_by_name(self, connection_key: str) -> Match:
-        match = await self._repository.get_by_name(connection_key)
-        return match
+    async def get_by_game_id(self, game_id: int) -> list[Match]:
+        matches = await self._repository.get_by_game_id(game_id)
+
+        return matches
+
+    async def get_by_status(self, status: str) -> list[Match]:
+        matches = await self._repository.get_by_status(status)
+
+        return matches
+
+    async def get_by_game_id_and_status(self, game_id: int, status: str) -> list[Match]:
+        matches = await self._repository.get_by_game_id_and_status(game_id, status)
+
+        return matches
 
     async def update(self, body: MatchRequest) -> Match:
         match = await self._repository.get_by_id(body.id)

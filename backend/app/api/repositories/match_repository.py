@@ -26,21 +26,29 @@ class MatchRepository:
 
         return match
 
-    async def get_by_name(self, name: str) -> Match:
-        stmt = select(Match).where(Match.name == name)
-        match = await self._db.scalar(stmt)
-
-        if not match:
-            raise ModelNotFoundError(Match.__tablename__)
-
-        return match
-
-    async def get_all_matches(self):
-        stmt = select(Match)
+    async def get_by_game_id(self, game_id: int) -> list[Match]:
+        stmt = select(Match).where(Match.game_id == game_id)
         matches = await self._db.scalars(stmt)
 
         return matches.all()
 
+    async def get_by_status(self, status: str) -> list[Match]:
+        stmt = select(Match)
+        matches = await self._db.scalars(stmt)
+
+        return [match for match in matches if match.status.value == status]
+
+    async def get_by_game_id_and_status(self, game_id: int, status: str) -> list[Match]:
+        stmt = select(Match).where(Match.game_id == game_id)
+        matches = await self._db.scalars(stmt)
+
+        return [match for match in matches if match.status.value == status]
+
+    async def get_all_matches(self) -> list[Match]:
+        stmt = select(Match)
+        matches = await self._db.scalars(stmt)
+
+        return matches.all()
 
     async def delete_match(self, match_id: int) -> bool:
         match = await self.get_by_id(match_id)
