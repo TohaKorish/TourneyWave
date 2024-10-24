@@ -19,9 +19,12 @@ class MatchService:
             password=body.password,
             game_id=body.game_id
         )
+        # Team()
+
 
         await self._repository.store_match(match)
         await self._db.commit()
+
 
         return match
 
