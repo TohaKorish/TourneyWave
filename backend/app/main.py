@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
+from fastapi_pagination import add_pagination
 
 from app.api.db import async_session
 from app.api.routers.user_router import router as user_router
@@ -12,6 +13,7 @@ from app.settings import Settings
 
 app = FastAPI()
 app.sa_sessionmaker = async_session
+add_pagination(app)
 
 settings = Settings()
 

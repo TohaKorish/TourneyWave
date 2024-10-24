@@ -29,6 +29,11 @@ class MatchService:
         match = await self._repository.get_by_id(match_id)
         return match
 
+    async def get_all_matches(self) -> list[Match]:
+        matches = await self._repository.get_all_matches()
+
+        return matches
+
     async def get_by_name(self, connection_key: str) -> Match:
         match = await self._repository.get_by_name(connection_key)
         return match

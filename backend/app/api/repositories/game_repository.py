@@ -37,6 +37,12 @@ class GameRepository:
 
         return game
 
+    async def get_all_games(self):
+        stmt = select(Game)
+        games = await self._db.scalars(stmt)
+
+        return games.all()
+
     async def get_by_name(self, name: str) -> Game:
         stmt = select(Game).where(Game.name == name)
         game = await self._db.scalar(stmt)
