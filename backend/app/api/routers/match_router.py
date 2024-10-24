@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from pydantic import TypeAdapter
 from fastapi_pagination import Page, paginate
 
@@ -16,8 +16,19 @@ async def create_match(body: MatchRequest, service: MatchServiceIoC) -> MatchRes
     return MatchResponse.model_validate(match)
 
 @router.get('/')
-async def get_all_matches(match_service: MatchServiceIoC) -> Page[MatchResponse]:
-    matches = await match_service.get_all_games()
+async def get_all_matches(match_service: MatchServiceIoC,
+                          game_id: int | None = Query(default=None, description="Filter by game id"),
+                          status: str | None = Query(default=None, description="Filter by match status")
+                          ) -> Page[MatchResponse]:
+    if game_id and status:
+        matches = await match_service.get_by_game_id_and_status(game_id, status)
+    elif game_id:
+        matches = await match_service.get_by_game_id(game_id)
+    elif status:
+        matches = await match_service.get_by_status(status)
+    else:
+        matches = await match_service.get_all_matches()
+
     return paginate(TypeAdapter(list[MatchResponse]).validate_python(
         matches, from_attributes=True
     ))
