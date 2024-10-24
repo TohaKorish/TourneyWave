@@ -35,6 +35,13 @@ class MatchRepository:
 
         return match
 
+    async def get_all_matches(self):
+        stmt = select(Match)
+        matches = await self._db.scalars(stmt)
+
+        return matches.all()
+
+
     async def delete_match(self, match_id: int) -> bool:
         match = await self.get_by_id(match_id)
         await self._db.delete(match)

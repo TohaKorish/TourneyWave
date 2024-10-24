@@ -34,6 +34,10 @@ class GameService:
 
         return game
 
+    async def get_all_games(self) -> list[Game]:
+        games = await self._repository.get_all_games()
+
+        return games
 
     async def get_by_name(self, name: str) -> Game:
         game = await self._repository.get_by_name(name)

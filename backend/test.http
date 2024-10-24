@@ -53,14 +53,15 @@ Content-Type: application/json
 {
   "name": "Chess",
   "image": "http://example.com/chess.png",
-  "participant_count": {
-    "min": 2,
-    "max": 2
-  }
+  "participant_count": [2]
 }
 ###
 
-GET http://localhost:8000/api/games/1
+GET http://localhost:8000/api/games/3
+###
+
+
+GET http://localhost:8000/api/games/
 ###
 
 ### Тестування матчів
