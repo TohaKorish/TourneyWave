@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from fastapi_pagination import Page, paginate
 from pydantic import TypeAdapter
 
@@ -14,8 +14,14 @@ async def create_game(body: GameRequest, service: GameServiceIoC) -> GameRespons
     return GameResponse.model_validate(game)
 
 @router.get('/')
-async def get_all_games(game_service: GameServiceIoC) -> Page[GameResponse]:
-    games = await game_service.get_all_games()
+async def get_all_games(game_service: GameServiceIoC,
+                        search: str | None = Query(default=None, description="Search by game name")
+                        ) -> Page[GameResponse]:
+    if search:
+        games = await game_service.search_by_part_of_name(search)
+    else:
+        games = await game_service.get_all_games()
+
     return paginate(TypeAdapter(list[GameResponse]).validate_python(
         games, from_attributes=True
     ))
