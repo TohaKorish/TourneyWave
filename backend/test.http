@@ -64,6 +64,8 @@ GET http://localhost:8000/api/games/3
 GET http://localhost:8000/api/games/
 ###
 
+GET http://localhost:8000/api/games?search=3
+
 ### Тестування матчів
 POST http://localhost:8000/api/matches
 Content-Type: application/json

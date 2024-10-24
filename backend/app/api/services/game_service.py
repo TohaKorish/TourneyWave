@@ -44,6 +44,11 @@ class GameService:
 
         return game
 
+    async def search_by_part_of_name(self, name: str) -> list[Game]:
+        games = await self._repository.search_by_part_of_name(name)
+
+        return games
+
     async def update(self, body: GameRequest) -> Game:
         game = Game(name=body.name, image=body.image, participant_count=body.participant_count)
         game = await self._repository.update_game(game)
