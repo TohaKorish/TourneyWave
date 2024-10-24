@@ -33,7 +33,7 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8000/api/users/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoidXNlciIsImV4cCI6MTcyOTUzMDk3NX0.zUXC-jZqSVUC-gwPN49qmIWM9C7IKzqOm2_uZwoApcM
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoidXNlciIsImV4cCI6MTcyOTgwOTE1NH0.Th9QkL-PzHsgNlQk92ojMBweNKmggdWcPnwnzZwb53w
 
 
 

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.depenencies import UserServiceIoC, ValidateTokenIoC
+from app.api.depenencies import UserServiceIoC, AuthenticateTokenIoC
 from app.api.schema.user.user_request import UserRequest
 from app.api.schema.user.user_response import UserResponse
 
@@ -15,7 +15,7 @@ async def create_user(body: UserRequest, service: UserServiceIoC) -> UserRespons
 
 
 @router.get('/me')
-async def get_me(user_id: ValidateTokenIoC, user_service: UserServiceIoC):
+async def get_me(user_id: AuthenticateTokenIoC, user_service: UserServiceIoC) -> UserResponse:
     user = await user_service.get(user_id)
 
     return UserResponse.model_validate(user)
