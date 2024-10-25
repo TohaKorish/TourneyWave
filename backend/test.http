@@ -68,6 +68,7 @@ GET http://localhost:8000/api/games?search=3
 
 ### Тестування матчів
 POST http://localhost:8000/api/matches
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoidXNlciIsImV4cCI6MTcyOTg2MDU1OX0.wt4Z8dKbBL1dIpLI13Eo3cmuuwTpIX0YY81A5x2wwHc
 Content-Type: application/json
 
 {

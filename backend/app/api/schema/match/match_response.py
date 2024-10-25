@@ -14,6 +14,7 @@ class MatchResponse(BaseModel):
     stream_url: str | None
     password: str | None
     game_id: int
+    owner_id: int
     winner_team_id: int | None
     teams: list[TeamResponse]
 

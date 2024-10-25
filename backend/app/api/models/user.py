@@ -22,3 +22,6 @@ class User(Base):
 
     # Many-to-Many зв'язок з Team
     teams = relationship('Team', secondary=user_team, back_populates='members')
+
+    # Зв'язок One-to-Many з Match
+    matches = relationship('Match', back_populates='owner')
