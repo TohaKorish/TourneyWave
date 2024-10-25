@@ -89,6 +89,8 @@ GET http://localhost:8000/api/matches?status=open
 
 GET http://localhost:8000/api/matches?game_id=1&status=completed
 
+###
+DELETE http://localhost:8000/api/matches/1
 
 ### Тестування команд
 POST http://localhost:8000/api/teams
