@@ -12,7 +12,7 @@ class MatchService:
         self._repository = repository
         self._team_repository = team_repository
 
-    async def create(self, body: MatchRequest) -> Match:
+    async def create(self, body: MatchRequest, user_id: int) -> Match:
         match = Match(
             datetime=body.datetime,
             connection_key=body.connection_key,
@@ -20,6 +20,7 @@ class MatchService:
             stream_url=body.stream_url,
             password=body.password,
             game_id=body.game_id,
+            owner_id=user_id,
             teams=[
                 Team(name="Team 1", members=[]),
                 Team(name="Team 2", members=[]),

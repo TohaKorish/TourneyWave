@@ -42,3 +42,7 @@ class Match(Base):
     # Зв'язок One-to-One з переможною командою
     winner_team_id = Column(Integer, ForeignKey('teams.id'))
     winner_team = relationship('Team', uselist=False, foreign_keys=[winner_team_id])
+
+    # Зв'язок Many-to-One з User
+    owner_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    owner = relationship('User', back_populates='matches')

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Query
 from pydantic import TypeAdapter
 from fastapi_pagination import Page, paginate
 
-from app.api.depenencies import MatchServiceIoC
+from app.api.depenencies import MatchServiceIoC, AuthenticateTokenIoC
 from app.api.schema.match.match_request import MatchRequest
 from app.api.schema.match.match_response import MatchResponse
 
@@ -11,8 +11,8 @@ router = APIRouter(prefix="/api/matches", tags=["matches"])
 # TODO: get all route with search and pagination (FILTER IN PROCESS GAMES)
 
 @router.post('/')
-async def create_match(body: MatchRequest, service: MatchServiceIoC) -> MatchResponse:
-    match = await service.create(body)
+async def create_match(body: MatchRequest, service: MatchServiceIoC, user_id: AuthenticateTokenIoC) -> MatchResponse:
+    match = await service.create(body, user_id)
     return MatchResponse.model_validate(match)
 
 @router.get('/')
