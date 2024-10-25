@@ -13,7 +13,6 @@ class Match(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     datetime = Column(DateTime, nullable=False)
-    # status = Column(Enum(MatchStatusEnum), default=MatchStatusEnum.CREATED, nullable=False)
     connection_key = Column(String(255), nullable=False)
     connection_description = Column(Text, nullable=False)
     stream_url = Column(String(255), nullable=True)
