@@ -33,7 +33,12 @@ class Match(Base):
     game = relationship('Game', back_populates='matches')
 
     # One-to-Many зв'язок з Team
-    teams = relationship('Team', back_populates='match', foreign_keys=[Team.match_id])
+    teams = relationship(
+        'Team',
+        back_populates='match',
+        foreign_keys=[Team.match_id],
+        cascade="all, delete-orphan"
+    )
 
     # Зв'язок One-to-One з переможною командою
     winner_team_id = Column(Integer, ForeignKey('teams.id'))

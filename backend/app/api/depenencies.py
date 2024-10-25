@@ -66,10 +66,10 @@ def get_game_service(session: AsyncSession = Depends(get_sa_session),
                      repo: GameRepository = Depends(get_game_repository)) -> GameService:
     return GameService(session, repo)
 
-
 def get_match_service(session: AsyncSession = Depends(get_sa_session),
-                      repo: MatchRepository = Depends(get_match_repository)) -> MatchService:
-    return MatchService(session, repo)
+                     repo: MatchRepository = Depends(get_match_repository),
+                      team_repo: TeamRepository = Depends(get_team_repository)) -> MatchService:
+    return MatchService(session, repo, team_repo)
 
 
 def get_auth_service(

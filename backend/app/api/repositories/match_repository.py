@@ -1,7 +1,9 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+
 from app.api.exceptions.model_not_found_error import ModelNotFoundError
-from app.api.models import Match
+from app.api.models import Match, Team
 
 
 class MatchRepository:
@@ -18,7 +20,7 @@ class MatchRepository:
         return match
 
     async def get_by_id(self, match_id: int) -> Match:
-        stmt = select(Match).where(Match.id == match_id)
+        stmt = select(Match).options(selectinload(Match.teams).selectinload(Team.members)).where(Match.id == match_id)
         match = await self._db.scalar(stmt)
 
         if not match:
@@ -27,25 +29,25 @@ class MatchRepository:
         return match
 
     async def get_by_game_id(self, game_id: int) -> list[Match]:
-        stmt = select(Match).where(Match.game_id == game_id)
+        stmt = select(Match).options(selectinload(Match.teams).selectinload(Team.members)).where(Match.game_id == game_id)
         matches = await self._db.scalars(stmt)
 
         return matches.all()
 
     async def get_by_status(self, status: str) -> list[Match]:
-        stmt = select(Match)
+        stmt = select(Match).options(selectinload(Match.teams).selectinload(Team.members))
         matches = await self._db.scalars(stmt)
 
         return [match for match in matches if match.status.value == status]
 
     async def get_by_game_id_and_status(self, game_id: int, status: str) -> list[Match]:
-        stmt = select(Match).where(Match.game_id == game_id)
+        stmt = select(Match).options(selectinload(Match.teams).selectinload(Team.members)).where(Match.game_id == game_id)
         matches = await self._db.scalars(stmt)
 
         return [match for match in matches if match.status.value == status]
 
     async def get_all_matches(self) -> list[Match]:
-        stmt = select(Match)
+        stmt = select(Match).options(selectinload(Match.teams).selectinload(Team.members))
         matches = await self._db.scalars(stmt)
 
         return matches.all()

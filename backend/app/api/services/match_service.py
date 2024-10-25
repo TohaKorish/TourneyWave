@@ -1,14 +1,16 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.models import Match
+from app.api.models import Match, Team
 from app.api.repositories.match_repository import MatchRepository
+from app.api.repositories.team_repository import TeamRepository
 from app.api.schema.match.match_request import MatchRequest
 
 
 class MatchService:
-    def __init__(self, db: AsyncSession, repository: MatchRepository):
+    def __init__(self, db: AsyncSession, repository: MatchRepository, team_repository: TeamRepository):
         self._db = db
         self._repository = repository
+        self._team_repository = team_repository
 
     async def create(self, body: MatchRequest) -> Match:
         match = Match(
@@ -17,10 +19,12 @@ class MatchService:
             connection_description=body.connection_description,
             stream_url=body.stream_url,
             password=body.password,
-            game_id=body.game_id
+            game_id=body.game_id,
+            teams=[
+                Team(name="Team 1", members=[]),
+                Team(name="Team 2", members=[]),
+            ]
         )
-        # Team()
-
 
         await self._repository.store_match(match)
         await self._db.commit()
