@@ -106,7 +106,7 @@ Content-Type: application/json
 
 {
   "match_id": 2,
-  "team_id": 4,
+  "team_id": 3,
   "user_id": 3
 }
 

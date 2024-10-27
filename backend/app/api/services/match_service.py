@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.exceptions.user_banned_error import UserBannedError
 from app.api.models import Match, Team
 from app.api.repositories.match_repository import MatchRepository
 from app.api.repositories.team_repository import TeamRepository
@@ -16,6 +17,10 @@ class MatchService:
         self._user_repository = user_repository
 
     async def create(self, body: MatchRequest, user_id: int) -> Match:
+        user = await self._user_repository.get_by_id(body.user_id)
+        if user.is_banned:
+            raise UserBannedError("create a match")
+
         match = Match(
             datetime=body.datetime,
             connection_key=body.connection_key,
@@ -79,6 +84,10 @@ class MatchService:
         return is_deleted
 
     async def join_team(self, body: JoinTeamRequest) -> Match:
+        user = await self._user_repository.get_by_id(body.user_id)
+        if user.is_banned:
+            raise UserBannedError("create a match")
+
         match = await self._repository.get_by_id(body.match_id)
 
         for team in match.teams:
@@ -87,7 +96,6 @@ class MatchService:
             else:
                 user_in_team = any(member.id == body.user_id for member in team.members)
                 if not user_in_team:
-                    user = await self._user_repository.get_by_id(body.user_id)
                     team.members.append(user)
 
         await self._db.commit()
