@@ -105,10 +105,13 @@ PATCH http://localhost:8000/api/matches/join-team/1
 Content-Type: application/json
 
 {
-  "match_id": 2,
-  "team_id": 3,
-  "user_id": 3
+  "match_id": 1,
+  "team_id": 1,
+  "user_id": 4
 }
+
+###
+PATCH http://localhost:8000/api/matches/complete/1/2
 
 ### Тестування команд
 POST http://localhost:8000/api/teams
