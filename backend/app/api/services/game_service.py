@@ -49,8 +49,12 @@ class GameService:
 
         return games
 
-    async def update(self, body: GameRequest) -> Game:
-        game = Game(name=body.name, image=body.image, participant_count=body.participant_count)
+    async def update(self, game_id: int, body: GameRequest) -> Game:
+        game = await self._repository.get_by_id(game_id)
+        game.name = body.name
+        game.participant_count = body.participant_count
+        game.image = body.image
+
         game = await self._repository.update_game(game)
         await self._db.commit()
 

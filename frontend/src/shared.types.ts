@@ -9,3 +9,10 @@ export interface Profile {
   email: string,
   role: UserRole
 }
+
+export interface Game {
+  id: number,
+  name: string,
+  image: string,
+  participantCount: number[]
+}

@@ -12,6 +12,7 @@ from app.api.repositories.team_repository import TeamRepository
 from app.api.repositories.user_repository import UserRepository
 from app.api.services.auth_service import AuthService
 from app.api.services.game_service import GameService
+from app.api.services.image_service import ImageService
 from app.api.services.match_service import MatchService
 from app.api.services.team_service import TeamService
 from app.api.services.token_service import TokenService
@@ -100,7 +101,10 @@ def authorize_by_token(token: Annotated[str, Depends(oauth2_scheme)],
 
     return role
 
+def get_image_service() -> ImageService:
+    return ImageService()
 
+ImageServiceIoC = Annotated[ImageService, Depends(get_image_service)]
 DBSessionIoC = Annotated[AsyncSession, Depends(get_sa_session)]
 UserServiceIoC = Annotated[UserService, Depends(get_user_service)]
 GameServiceIoC = Annotated[GameService, Depends(get_game_service)]

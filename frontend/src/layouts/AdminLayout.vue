@@ -13,16 +13,16 @@ const isAuthenticated = computed(() => jwtStore.isAuthenticated);
 const linksList = [
 
   {
-    title: 'Tab1',
-    caption: 'Tab1',
-    icon: 'dashboard',
-    link: '/'
+    title: 'Games',
+    caption: 'Games',
+    icon: 'games',
+    link: '/admin/games'
   },
   {
-    title: 'Tab2',
-    caption: 'Tab2',
-    icon: 'list',
-    link: '/sessions'
+    title: 'To Frontend',
+    caption: 'Go to frontend',
+    icon: 'web',
+    link: '/dashboard'
   }
 ];
 
