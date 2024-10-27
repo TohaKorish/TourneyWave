@@ -31,9 +31,9 @@ async def get_game(game_id: int, game_service: GameServiceIoC) -> GameResponse:
     game = await game_service.get(game_id)
     return GameResponse.model_validate(game)
 
-@router.put('/')
-async def update_game(body: GameRequest, game_service: GameServiceIoC) -> GameResponse:
-    game = await game_service.update(body)
+@router.put('/{game_id}')
+async def update_game(body: GameRequest, game_service: GameServiceIoC, game_id: int) -> GameResponse:
+    game = await game_service.update(game_id, body)
     return GameResponse.model_validate(game)
 
 @router.delete('/{game_id}')

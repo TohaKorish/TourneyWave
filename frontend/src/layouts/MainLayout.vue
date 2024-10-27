@@ -1,9 +1,10 @@
 <script setup>
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useJwtStore } from 'stores/jwt-store.js';
 import ProfileDropdown from 'components/ProfileDropdown.vue';
 import {computed} from "vue";
 
+const route = useRoute()
 const router = useRouter()
 
 const handleLoginClick = () => {
@@ -66,6 +67,7 @@ const isLoggedIn = computed(() => jwtStore.isAuthenticated);
 
         <div v-if="isLoggedIn" class="q-ml-md self-stretch flex items-center">
           <q-btn
+            v-if="!route.path.includes('dashboard')"
             color="primary"
             label="To dashboard"
             no-caps
