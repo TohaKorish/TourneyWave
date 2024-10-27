@@ -42,3 +42,17 @@ class UserRepository:
         await self._db.delete(user)
 
         return True
+
+    async def ban_user(self, user_id: int) -> bool:
+        user = await self.get_by_id(user_id)
+        user.is_banned = True
+        await self._db.flush()
+
+        return True
+
+    async def unban_user(self, user_id: int) -> bool:
+        user = await self.get_by_id(user_id)
+        user.is_banned = False
+        await self._db.flush()
+
+        return True

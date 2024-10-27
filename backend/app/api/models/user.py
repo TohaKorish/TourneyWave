@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, Column, String, Enum, ForeignKey, Table
+from sqlalchemy import Integer, Column, String, Enum, ForeignKey, Table, Boolean
 from sqlalchemy.orm import relationship
 
 from app.api.db import Base
@@ -17,6 +17,7 @@ class User(Base):
     email = Column(String(255), unique=True, nullable=False)
     username = Column(String(255), nullable=False)
     role = Column(Enum(RoleEnum), default=RoleEnum.USER, nullable=False)
+    is_banned = Column(Boolean, default=False, nullable=False)
     hashed_password = Column(String(255), nullable=False)
 
 
