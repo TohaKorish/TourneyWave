@@ -57,8 +57,8 @@ class MatchService:
 
         return matches
 
-    async def update(self, body: MatchRequest) -> Match:
-        match = await self._repository.get_by_id(body.id)
+    async def update(self, match_id: int, body: MatchRequest) -> Match:
+        match = await self._repository.get_by_id(match_id)
         match.datetime = body.datetime
         match.connection_key = body.connection_key
         match.connection_description = body.connection_description

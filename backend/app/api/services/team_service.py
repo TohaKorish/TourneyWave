@@ -38,8 +38,8 @@ class TeamService:
         team = await self._repository.get_by_name(name)
         return team
 
-    async def update(self, body: TeamRequest) -> Team:
-        team = await self._repository.get_by_id(body.id)
+    async def update(self, team_id: int, body: TeamRequest) -> Team:
+        team = await self._repository.get_by_id(team_id)
         team.name = body.name
 
         team = await self._repository.update_team(team)

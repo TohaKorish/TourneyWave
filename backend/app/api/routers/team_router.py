@@ -16,9 +16,9 @@ async def get_team(team_id: int, team_service: TeamServiceIoC) -> TeamResponse:
     team = await team_service.get(team_id)
     return TeamResponse.model_validate(team)
 
-@router.put('/')
-async def update_team(body: TeamRequest, team_service: TeamServiceIoC) -> TeamResponse:
-    team = await team_service.update(body)
+@router.put('/{team_id}')
+async def update_team(body: TeamRequest, team_service: TeamServiceIoC, team_id: int) -> TeamResponse:
+    team = await team_service.update(team_id, body)
     return TeamResponse.model_validate(team)
 
 @router.delete('/{team_id}')

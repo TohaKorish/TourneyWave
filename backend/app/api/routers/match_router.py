@@ -39,9 +39,9 @@ async def get_match(match_id: int, match_service: MatchServiceIoC) -> MatchRespo
     match = await match_service.get(match_id)
     return MatchResponseWithTeams.model_validate(match)
 
-@router.put('/')
-async def update_match(body: MatchRequest, match_service: MatchServiceIoC) -> MatchResponseWithTeams:
-    match = await match_service.update(body)
+@router.put('/{match_id}')
+async def update_match(body: MatchRequest, match_service: MatchServiceIoC, match_id: int) -> MatchResponseWithTeams:
+    match = await match_service.update(match_id, body)
     return MatchResponseWithTeams.model_validate(match)
 
 @router.delete('/{match_id}')
