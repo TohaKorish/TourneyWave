@@ -100,7 +100,7 @@ const onSubmit = async () => {
   let imageUrl = preview.value.url;
 
   try {
-    if (isEdit && isImageChanged.value) {
+    if (!isEdit || isImageChanged.value) {
       // Sending image to server
       const formData = new FormData();
       formData.append('image', image.value);
