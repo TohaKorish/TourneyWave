@@ -16,7 +16,6 @@ class MatchResponse(BaseModel):
     game_id: int
     owner_id: int
     winner_team_id: int | None
-    teams: list[TeamResponse]
 
     class Config:
         from_attributes = True
