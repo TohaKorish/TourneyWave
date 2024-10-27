@@ -3,14 +3,17 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.models import Match, Team
 from app.api.repositories.match_repository import MatchRepository
 from app.api.repositories.team_repository import TeamRepository
+from app.api.repositories.user_repository import UserRepository
+from app.api.schema.match.join_team_request import JoinTeamRequest
 from app.api.schema.match.match_request import MatchRequest
 
 
 class MatchService:
-    def __init__(self, db: AsyncSession, repository: MatchRepository, team_repository: TeamRepository):
+    def __init__(self, db: AsyncSession, repository: MatchRepository, team_repository: TeamRepository, user_repository: UserRepository):
         self._db = db
         self._repository = repository
         self._team_repository = team_repository
+        self._user_repository = user_repository
 
     async def create(self, body: MatchRequest, user_id: int) -> Match:
         match = Match(
@@ -75,3 +78,17 @@ class MatchService:
         await self._db.commit()
         return is_deleted
 
+    async def join_team(self, body: JoinTeamRequest) -> Match:
+        match = await self._repository.get_by_id(body.match_id)
+
+        for team in match.teams:
+            if team.id != body.team_id:
+                team.members = [member for member in team.members if member.id != body.user_id]
+            else:
+                user_in_team = any(member.id == body.user_id for member in team.members)
+                if not user_in_team:
+                    user = await self._user_repository.get_by_id(body.user_id)
+                    team.members.append(user)
+
+        await self._db.commit()
+        return match

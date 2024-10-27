@@ -69,8 +69,9 @@ def get_game_service(session: AsyncSession = Depends(get_sa_session),
 
 def get_match_service(session: AsyncSession = Depends(get_sa_session),
                      repo: MatchRepository = Depends(get_match_repository),
-                      team_repo: TeamRepository = Depends(get_team_repository)) -> MatchService:
-    return MatchService(session, repo, team_repo)
+                      team_repo: TeamRepository = Depends(get_team_repository),
+                      user_repo: UserRepository = Depends(get_user_repository)) -> MatchService:
+    return MatchService(session, repo, team_repo, user_repo)
 
 
 def get_auth_service(
