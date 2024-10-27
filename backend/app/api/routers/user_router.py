@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.depenencies import UserServiceIoC, AuthenticateTokenIoC
+from app.api.depenencies import UserServiceIoC, AuthenticateTokenIoC, AuthorizeTokenIoC
 from app.api.schema.user.user_request import UserRequest
 from app.api.schema.user.user_response import UserResponse
 
@@ -19,3 +19,12 @@ async def get_me(user_id: AuthenticateTokenIoC, user_service: UserServiceIoC) ->
     user = await user_service.get(user_id)
 
     return UserResponse.model_validate(user)
+
+
+@router.patch('/ban/{user_id}')
+async def ban_user(user_id: int, role: AuthorizeTokenIoC, user_service: UserServiceIoC) -> bool:
+    return await user_service.ban_user(user_id)
+
+@router.patch('/unban/{user_id}')
+async def ban_user(user_id: int, role: AuthorizeTokenIoC, user_service: UserServiceIoC) -> bool:
+    return await user_service.unban_user(user_id)

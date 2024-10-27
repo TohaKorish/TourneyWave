@@ -35,6 +35,13 @@ Content-Type: application/json
 GET http://localhost:8000/api/users/me
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoidXNlciIsImV4cCI6MTcyOTgwOTE1NH0.Th9QkL-PzHsgNlQk92ojMBweNKmggdWcPnwnzZwb53w
 
+###
+PATCH http://localhost:8000/api/users/ban/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3MzAwMjk2NDl9.EH475Fvpe5wMZCMdQp6U4BnL4TmZW7-lcyXqmb1B55s
+
+###
+PATCH http://localhost:8000/api/users/unban/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3MzAwMjk2NDl9.EH475Fvpe5wMZCMdQp6U4BnL4TmZW7-lcyXqmb1B55s
 
 
 
