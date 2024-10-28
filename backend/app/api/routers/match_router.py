@@ -53,3 +53,8 @@ async def delete_match(match_id: int, match_service: MatchServiceIoC) -> bool:
 async def join_team(body: JoinTeamRequest, match_service: MatchServiceIoC) -> MatchResponseWithTeams:
     match = await match_service.join_team(body)
     return MatchResponseWithTeams.model_validate(match)
+
+@router.patch('/complete/{match_id}/{winner_team_id}')
+async def complete_match(match_id: int, winner_team_id: int, match_service: MatchServiceIoC) -> MatchResponseWithTeams:
+    match = await match_service.complete_match(match_id, winner_team_id)
+    return MatchResponseWithTeams.model_validate(match)

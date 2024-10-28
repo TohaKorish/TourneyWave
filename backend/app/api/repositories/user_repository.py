@@ -1,7 +1,11 @@
-from sqlalchemy import select
+from sqlalchemy import select, join
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+
 from app.api.exceptions.model_not_found_error import ModelNotFoundError
-from app.api.models.user import User
+from app.api.models import Team
+from app.api.models.user import User, user_team
+from app.api.models.user_game import UserGame
 
 
 class UserRepository:

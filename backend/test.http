@@ -17,8 +17,8 @@ POST http://localhost:8000/api/users
 Content-Type: application/json
 
 {
-  "username": "admin",
-  "email": "admin@gmail.com",
+  "username": "jjeasajd",
+  "email": "clown@gmail.com",
   "password": "Qwerty123"
 }
 ###
@@ -89,7 +89,7 @@ Content-Type: application/json
 }
 ###
 
-GET http://localhost:8000/api/matches
+GET http://localhost:8000/api/matches/1
 ###
 
 GET http://localhost:8000/api/matches?status=open
@@ -106,9 +106,12 @@ Content-Type: application/json
 
 {
   "match_id": 2,
-  "team_id": 3,
-  "user_id": 3
+  "team_id": 4,
+  "user_id": 2
 }
+
+###
+PATCH http://localhost:8000/api/matches/complete/2/4
 
 ### Тестування команд
 POST http://localhost:8000/api/teams
