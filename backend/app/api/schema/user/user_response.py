@@ -8,7 +8,6 @@ class UserResponse(BaseModel):
     email: EmailStr
     username: str
     role: RoleEnum
-    user_games: list[UserGameResponse]
 
     class Config:
         from_attributes = True

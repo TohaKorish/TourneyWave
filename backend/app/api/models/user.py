@@ -28,4 +28,4 @@ class User(Base):
     matches = relationship('Match', back_populates='owner')
 
     # Many-to-Many зв'язок з Game через user_game
-    user_games = relationship('UserGame', back_populates='user')
+    user_games = relationship('UserGame', back_populates='user', cascade="all, delete-orphan")

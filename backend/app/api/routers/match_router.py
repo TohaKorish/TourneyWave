@@ -55,6 +55,6 @@ async def join_team(body: JoinTeamRequest, match_service: MatchServiceIoC) -> Ma
     return MatchResponseWithTeams.model_validate(match)
 
 @router.patch('/complete/{match_id}/{winner_team_id}')
-async def complete_match(match_id: int, winner_team_id: int, match_service: MatchServiceIoC) -> MatchResponse:
+async def complete_match(match_id: int, winner_team_id: int, match_service: MatchServiceIoC) -> MatchResponseWithTeams:
     match = await match_service.complete_match(match_id, winner_team_id)
     return MatchResponseWithTeams.model_validate(match)
