@@ -2,7 +2,6 @@ from datetime import datetime
 from pydantic import BaseModel
 
 from app.api.models.enums import MatchStatusEnum
-from app.api.schema.team.team_response import TeamResponse
 
 
 class MatchResponse(BaseModel):

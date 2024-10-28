@@ -2,7 +2,6 @@ from sqlalchemy import Integer, Column, String, JSON
 from sqlalchemy.orm import relationship
 
 from app.api.db import Base
-from app.api.models.user import user_game
 
 
 class Game(Base):
@@ -18,4 +17,4 @@ class Game(Base):
     matches = relationship('Match', back_populates='game')
 
     # Many-to-Many зв'язок з User через user_game
-    users = relationship('User', secondary=user_game, back_populates='games')
+    user_games = relationship('UserGame', back_populates='game')

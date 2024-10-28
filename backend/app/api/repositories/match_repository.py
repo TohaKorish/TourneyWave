@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.api.exceptions.model_not_found_error import ModelNotFoundError
-from app.api.models import Match, Team
+from app.api.models import Match, Team, User
 
 
 class MatchRepository:
@@ -20,11 +20,15 @@ class MatchRepository:
         return match
 
     async def get_by_id(self, match_id: int) -> Match:
-        stmt = select(Match).options(selectinload(Match.teams).selectinload(Team.members)).where(Match.id == match_id)
+        stmt = select(Match).options(selectinload(Match.teams).selectinload(Team.members).selectinload(User.user_games)).where(Match.id == match_id)
         match = await self._db.scalar(stmt)
 
         if not match:
             raise ModelNotFoundError(Match.__tablename__)
+
+        for team in match.teams:
+            for member in team.members:
+                member.user_games = [ug for ug in member.user_games if ug.game_id == match.game_id]
 
         return match
 

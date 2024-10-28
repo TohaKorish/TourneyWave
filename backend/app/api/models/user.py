@@ -10,14 +10,6 @@ user_team = Table(
     Column('team_id', Integer, ForeignKey('teams.id'))
 )
 
-user_game = Table(
-    'user_game',
-    Base.metadata,
-    Column('user_id', Integer, ForeignKey('users.id'), primary_key=True),
-    Column('game_id', Integer, ForeignKey('games.id'), primary_key=True),
-    Column('rating', Integer, nullable=False, default=0)
-)
-
 class User(Base):
     __tablename__ = 'users'
 
@@ -36,4 +28,4 @@ class User(Base):
     matches = relationship('Match', back_populates='owner')
 
     # Many-to-Many зв'язок з Game через user_game
-    games = relationship('Game', secondary=user_game, back_populates='users')
+    user_games = relationship('UserGame', back_populates='user')

@@ -9,6 +9,7 @@ from app.api.models.enums import RoleEnum
 from app.api.repositories.game_repository import GameRepository
 from app.api.repositories.match_repository import MatchRepository
 from app.api.repositories.team_repository import TeamRepository
+from app.api.repositories.user_game_repository import UserGameRepository
 from app.api.repositories.user_repository import UserRepository
 from app.api.services.auth_service import AuthService
 from app.api.services.game_service import GameService
@@ -51,6 +52,9 @@ def get_team_repository(session: AsyncSession = Depends(get_sa_session)) -> Team
 def get_match_repository(session: AsyncSession = Depends(get_sa_session)) -> MatchRepository:
     return MatchRepository(session)
 
+def get_user_game_repository(session: AsyncSession = Depends(get_sa_session)) -> UserGameRepository:
+    return UserGameRepository(session)
+
 
 def get_user_service(session: AsyncSession = Depends(get_sa_session),
                      repo: UserRepository = Depends(get_user_repository),
@@ -69,15 +73,17 @@ def get_game_service(session: AsyncSession = Depends(get_sa_session),
     return GameService(session, repo)
 
 def get_rating_service(session: AsyncSession = Depends(get_sa_session),
-                     repo: MatchRepository = Depends(get_match_repository)) -> RatingService:
-    return RatingService(session, repo)
+                     repo: MatchRepository = Depends(get_match_repository),
+                     user_repo: UserRepository = Depends(get_user_repository)) -> RatingService:
+    return RatingService(session, repo, user_repo)
 
 def get_match_service(session: AsyncSession = Depends(get_sa_session),
                      repo: MatchRepository = Depends(get_match_repository),
                       team_repo: TeamRepository = Depends(get_team_repository),
+                      user_game_repo: UserGameRepository = Depends(get_user_game_repository),
                       user_repo: UserRepository = Depends(get_user_repository),
                       rating_service: RatingService = Depends(get_rating_service)) -> MatchService:
-    return MatchService(session, repo, team_repo, user_repo, rating_service)
+    return MatchService(session, repo, team_repo, user_repo, user_game_repo, rating_service)
 
 
 def get_auth_service(
