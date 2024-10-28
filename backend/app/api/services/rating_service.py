@@ -1,3 +1,5 @@
+from math import floor
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.models import Team
@@ -35,12 +37,12 @@ class RatingService:
 
         return None
 
-    def calculate_average_rating(self, team: Team) -> float:
+    def calculate_average_rating(self, team: Team) -> int:
 
         ratings = [
             member.user_games[0].rating
             for member in team.members
         ]
 
-        return sum(ratings) / len(ratings)
+        return floor(sum(ratings) / len(ratings))
 
