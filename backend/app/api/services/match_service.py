@@ -2,8 +2,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.exceptions.user_banned_error import UserBannedError
 from app.api.models import Match, Team
+from app.api.models.user_game import UserGame
 from app.api.repositories.match_repository import MatchRepository
 from app.api.repositories.team_repository import TeamRepository
+from app.api.repositories.user_game_repository import UserGameRepository
 from app.api.repositories.user_repository import UserRepository
 from app.api.schema.match.join_team_request import JoinTeamRequest
 from app.api.schema.match.match_request import MatchRequest
@@ -11,15 +13,16 @@ from app.api.services.rating_service import RatingService
 
 
 class MatchService:
-    def __init__(self, db: AsyncSession, repository: MatchRepository, team_repository: TeamRepository, user_repository: UserRepository, rating_service: RatingService):
+    def __init__(self, db: AsyncSession, repository: MatchRepository, team_repository: TeamRepository, user_repository: UserRepository, user_game_repository: UserGameRepository, rating_service: RatingService):
         self._db = db
         self._repository = repository
         self._team_repository = team_repository
         self._user_repository = user_repository
+        self._user_game_repository = user_game_repository
         self._rating_service = rating_service
 
     async def create(self, body: MatchRequest, user_id: int) -> Match:
-        user = await self._user_repository.get_by_id(body.user_id)
+        user = await self._user_repository.get_by_id(user_id)
         if user.is_banned:
             raise UserBannedError("create a match")
 
@@ -99,6 +102,16 @@ class MatchService:
                 user_in_team = any(member.id == body.user_id for member in team.members)
                 if not user_in_team:
                     team.members.append(user)
+
+        user_game = await self._user_game_repository.get_by_user_id_and_game_id(body.user_id, match.game_id)
+
+        if not user_game:
+            user_game = UserGame(
+                user_id=body.user_id,
+                game_id=match.game_id
+            )
+
+            await self._user_game_repository.store_user_game(user_game)
 
         await self._db.commit()
         return match
