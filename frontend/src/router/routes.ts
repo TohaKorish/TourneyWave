@@ -17,20 +17,10 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/frontend/LandingPage.vue') },
-      {
-        path: '/login',
-        component: () => import('pages/frontend/LoginPage.vue'),
-      },
-      {
-        path: '/dashboard',
-        component: () => import('pages/frontend/DashboardPage.vue'),
-        meta: { requiresAuth: true, role: 'user' }
-
-      },
-      {
-        path: '/registration',
-        component: () => import('pages/frontend/RegistrationPage.vue'),
-      },
+      { path: '/login', component: () => import('pages/frontend/LoginPage.vue'), },
+      { path: '/dashboard', component: () => import('pages/frontend/DashboardPage.vue'), meta: { requiresAuth: true, role: 'user' } },
+      { path: '/registration', component: () => import('pages/frontend/RegistrationPage.vue'), },
+      { path: '/matches', component: () => import('pages/frontend/MatchesPage.vue'), },
     ],
   },
 

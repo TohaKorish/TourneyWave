@@ -17,8 +17,8 @@ POST http://localhost:8000/api/users
 Content-Type: application/json
 
 {
-  "username": "jjeasajd",
-  "email": "clown@gmail.com",
+  "username": "admin",
+  "email": "admin@gmail.com",
   "password": "Qwerty123"
 }
 ###
@@ -27,7 +27,7 @@ POST http://localhost:8000/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@gmail.com",
+  "email": "admin@gmail.com",
   "password": "Qwerty123"
 }
 
@@ -75,21 +75,23 @@ GET http://localhost:8000/api/games?search=3
 
 ### Тестування матчів
 POST http://localhost:8000/api/matches
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoidXNlciIsImV4cCI6MTcyOTg2MDU1OX0.wt4Z8dKbBL1dIpLI13Eo3cmuuwTpIX0YY81A5x2wwHc
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3MzAyODY3Nzl9.4w2cfY9dWXrDQXK-7I1pQw-IVS-NujfAwsnshGI-WB0
 Content-Type: application/json
 
 {
-  "datetime": "2024-10-22T15:00:00",
+  "datetime": "2024-10-30T11:00:00",
   "connection_key": "12345",
   "connection_description": "Match description",
   "stream_url": "http://example.com/stream",
   "password": "matchpassword",
-  "game_id": 1,
-  "winner_team_id": null
+  "game_id": 5,
+  "owner_id": 1,
+  "winner_team_id": null,
+  "players_number": 2
 }
 ###
 
-GET http://localhost:8000/api/matches/1
+GET http://localhost:8000/api/matches/
 ###
 
 GET http://localhost:8000/api/matches?status=open
@@ -106,12 +108,9 @@ Content-Type: application/json
 
 {
   "match_id": 2,
-  "team_id": 4,
-  "user_id": 2
+  "team_id": 3,
+  "user_id": 3
 }
-
-###
-PATCH http://localhost:8000/api/matches/complete/2/4
 
 ### Тестування команд
 POST http://localhost:8000/api/teams

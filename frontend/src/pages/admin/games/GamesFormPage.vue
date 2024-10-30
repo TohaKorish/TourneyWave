@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import GamesForm from 'components/GamesForm.vue';
+import GamesForm from 'components/admin/GamesForm.vue';
 </script>
 
 <template>

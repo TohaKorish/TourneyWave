@@ -12,3 +12,4 @@ class MatchRequest(BaseModel):
     password: str | None = None
     game_id: int
     winner_team_id: int | None = None
+    players_number: int
