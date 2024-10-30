@@ -17,7 +17,7 @@ class MatchService:
         self._user_repository = user_repository
 
     async def create(self, body: MatchRequest, user_id: int) -> Match:
-        user = await self._user_repository.get_by_id(body.user_id)
+        user = await self._user_repository.get_by_id(user_id)
         if user.is_banned:
             raise UserBannedError("create a match")
 
@@ -29,6 +29,7 @@ class MatchService:
             password=body.password,
             game_id=body.game_id,
             owner_id=user_id,
+            players_number=body.players_number,
             teams=[
                 Team(name="Team 1", members=[]),
                 Team(name="Team 2", members=[]),
@@ -38,6 +39,8 @@ class MatchService:
         await self._repository.store_match(match)
         await self._db.commit()
 
+
+        match = await self._repository.get_by_id(match.id)
 
         return match
 
@@ -89,6 +92,7 @@ class MatchService:
             raise UserBannedError("create a match")
 
         match = await self._repository.get_by_id(body.match_id)
+        max_team_size = match.players_number
 
         for team in match.teams:
             if team.id != body.team_id:
@@ -96,6 +100,9 @@ class MatchService:
             else:
                 user_in_team = any(member.id == body.user_id for member in team.members)
                 if not user_in_team:
+                    if len(team.members) == max_team_size:
+                        raise ValueError("too many team members")
+
                     team.members.append(user)
 
         await self._db.commit()

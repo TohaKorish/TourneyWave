@@ -17,4 +17,4 @@ class Team(Base):
     match = relationship('Match', back_populates='teams', foreign_keys=[match_id])
 
     # Many-to-Many зв'язок з User
-    members = relationship('User', secondary=user_team, back_populates='teams')
+    members = relationship('User', secondary=user_team, back_populates='teams', lazy='selectin')
