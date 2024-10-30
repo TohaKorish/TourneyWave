@@ -16,7 +16,7 @@ app = FastAPI()
 app.sa_sessionmaker = async_session
 add_pagination(app)
 
-# app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 app.add_middleware(
