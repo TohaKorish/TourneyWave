@@ -9,11 +9,13 @@ from app.api.models.enums import RoleEnum
 from app.api.repositories.game_repository import GameRepository
 from app.api.repositories.match_repository import MatchRepository
 from app.api.repositories.team_repository import TeamRepository
+from app.api.repositories.user_game_repository import UserGameRepository
 from app.api.repositories.user_repository import UserRepository
 from app.api.services.auth_service import AuthService
 from app.api.services.game_service import GameService
 from app.api.services.image_service import ImageService
 from app.api.services.match_service import MatchService
+from app.api.services.rating_service import RatingService
 from app.api.services.team_service import TeamService
 from app.api.services.token_service import TokenService
 from app.api.services.user_service import UserService
@@ -50,6 +52,9 @@ def get_team_repository(session: AsyncSession = Depends(get_sa_session)) -> Team
 def get_match_repository(session: AsyncSession = Depends(get_sa_session)) -> MatchRepository:
     return MatchRepository(session)
 
+def get_user_game_repository(session: AsyncSession = Depends(get_sa_session)) -> UserGameRepository:
+    return UserGameRepository(session)
+
 
 def get_user_service(session: AsyncSession = Depends(get_sa_session),
                      repo: UserRepository = Depends(get_user_repository),
@@ -67,11 +72,18 @@ def get_game_service(session: AsyncSession = Depends(get_sa_session),
                      repo: GameRepository = Depends(get_game_repository)) -> GameService:
     return GameService(session, repo)
 
+def get_rating_service(session: AsyncSession = Depends(get_sa_session),
+                     repo: MatchRepository = Depends(get_match_repository),
+                     user_repo: UserRepository = Depends(get_user_repository)) -> RatingService:
+    return RatingService(session, repo, user_repo)
+
 def get_match_service(session: AsyncSession = Depends(get_sa_session),
                      repo: MatchRepository = Depends(get_match_repository),
                       team_repo: TeamRepository = Depends(get_team_repository),
-                      user_repo: UserRepository = Depends(get_user_repository)) -> MatchService:
-    return MatchService(session, repo, team_repo, user_repo)
+                      user_game_repo: UserGameRepository = Depends(get_user_game_repository),
+                      user_repo: UserRepository = Depends(get_user_repository),
+                      rating_service: RatingService = Depends(get_rating_service)) -> MatchService:
+    return MatchService(session, repo, team_repo, user_repo, user_game_repo, rating_service)
 
 
 def get_auth_service(
@@ -111,6 +123,7 @@ UserServiceIoC = Annotated[UserService, Depends(get_user_service)]
 GameServiceIoC = Annotated[GameService, Depends(get_game_service)]
 TeamServiceIoC = Annotated[TeamService, Depends(get_team_service)]
 MatchServiceIoC = Annotated[MatchService, Depends(get_match_service)]
+RatingServiceIoC = Annotated[RatingService, Depends(get_rating_service)]
 TokenServiceIoC = Annotated[TokenService, Depends(get_token_service)]
 AuthServiceIoC = Annotated[AuthService, Depends(get_auth_service)]
 AuthenticateTokenIoC = Annotated[int, Depends(authenticate_by_token)]

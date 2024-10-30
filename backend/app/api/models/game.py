@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 
 from app.api.db import Base
 
+
 class Game(Base):
     __tablename__ = 'games'
 
@@ -14,3 +15,6 @@ class Game(Base):
 
     # Зв'язок One-to-Many з Match
     matches = relationship('Match', back_populates='game')
+
+    # Many-to-Many зв'язок з User через user_game
+    user_games = relationship('UserGame', back_populates='game', cascade="all, delete-orphan")
