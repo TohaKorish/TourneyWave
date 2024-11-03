@@ -12,11 +12,13 @@ router = APIRouter(prefix="/api/matches", tags=["matches"])
 
 # TODO: get all route with search and pagination (FILTER IN PROCESS GAMES)
 
+@router.post('')
 @router.post('/')
 async def create_match(body: MatchRequest, service: MatchServiceIoC, user_id: AuthenticateTokenIoC) -> MatchResponse:
     match = await service.create(body, user_id)
     return MatchResponse.model_validate(match)
 
+@router.get('')
 @router.get('/')
 async def get_all_matches(match_service: MatchServiceIoC,
                           game_id: int | None = Query(default=None, description="Filter by game id"),

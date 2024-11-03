@@ -33,25 +33,25 @@ class MatchRepository:
         return match
 
     async def get_by_game_id(self, game_id: int) -> list[Match]:
-        stmt = select(Match).where(Match.game_id == game_id)
+        stmt = select(Match).where(Match.game_id == game_id).order_by(Match.datetime.desc())
         matches = await self._db.scalars(stmt)
 
         return matches.all()
 
     async def get_by_status(self, status: str) -> list[Match]:
-        stmt = select(Match)
+        stmt = select(Match).order_by(Match.datetime.desc())
         matches = await self._db.scalars(stmt)
 
         return [match for match in matches if match.status.value == status]
 
     async def get_by_game_id_and_status(self, game_id: int, status: str) -> list[Match]:
-        stmt = select(Match).where(Match.game_id == game_id)
+        stmt = select(Match).where(Match.game_id == game_id).order_by(Match.datetime.desc())
         matches = await self._db.scalars(stmt)
 
         return [match for match in matches if match.status.value == status]
 
     async def get_all_matches(self) -> list[Match]:
-        stmt = select(Match)
+        stmt = select(Match).order_by(Match.datetime.desc())
         matches = await self._db.scalars(stmt)
 
         return matches.all()

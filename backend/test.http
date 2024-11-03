@@ -33,7 +33,7 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8000/api/users/me
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoidXNlciIsImV4cCI6MTcyOTgwOTE1NH0.Th9QkL-PzHsgNlQk92ojMBweNKmggdWcPnwnzZwb53w
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3MzA2ODUwODZ9.4q2XzaJd9oiJlt79zkO3zDYeEwkhPoTA1XhaXIVAtsc
 
 ###
 PATCH http://localhost:8000/api/users/ban/1
@@ -75,23 +75,23 @@ GET http://localhost:8000/api/games?search=3
 
 ### Тестування матчів
 POST http://localhost:8000/api/matches
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3MzAyODY3Nzl9.4w2cfY9dWXrDQXK-7I1pQw-IVS-NujfAwsnshGI-WB0
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3MzA0MzA4OTh9.KqftlA2jSy2YpbymGyoAWZ5e-F3MacWD1SHiBHDMdVI
 Content-Type: application/json
 
 {
-  "datetime": "2024-10-30T11:00:00",
+  "datetime": "2024-11-02T11:00:00",
   "connection_key": "12345",
   "connection_description": "Match description",
   "stream_url": "http://example.com/stream",
   "password": "matchpassword",
-  "game_id": 5,
+  "game_id": 4,
   "owner_id": 1,
   "winner_team_id": null,
   "players_number": 2
 }
 ###
 
-GET http://localhost:8000/api/matches/
+GET http://localhost:8000/api/matches/1
 ###
 
 GET http://localhost:8000/api/matches?status=open

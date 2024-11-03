@@ -1,15 +1,22 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue';
-import { Game, Match } from 'src/shared.types';
+import { onMounted, ref, watch } from 'vue';
+import { Game, Match, Status } from 'src/shared.types';
 import { useFetch } from 'src/composables/fetch';
+
+import { getStatusColor } from 'src/utils/utils';
 
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { useRouter } from 'vue-router';
 
 dayjs.extend(relativeTime);
 
+const router = useRouter();
+
+
 interface Props {
   gameFilter: Game | null;
+  status: Status;
 }
 
 const props = defineProps<Props>();
@@ -38,9 +45,11 @@ const fetchMatches = async (pageNum: number) => {
   if (!hasMorePages.value) return;
 
   loading.value = true;
-  const url = props.gameFilter
+  let url = props.gameFilter
     ? `/api/matches?size=20&page=${pageNum}&game_id=${props.gameFilter.id}`
     : `/api/matches?size=20&page=${pageNum}`;
+
+  url = props.status.value == 'all' ? url : url + `&status=${props.status.value}`
 
   try {
     const data = await useFetch('GET', url);
@@ -67,7 +76,7 @@ const onLoad = async (index: number, done: () => void) => {
 
 // Reset pagination when filter changes
 watch(
-  () => props.gameFilter,
+  [() => props.gameFilter, () => props.status],
   async () => {
     page.value = 1;
     hasMorePages.value = true;
@@ -76,20 +85,15 @@ watch(
   { deep: true }
 );
 
-const getStatusColorClass = (status: string) => {
-  const colorsMapping = {
-    'In progress': 'text-amber-7',
-    Open: 'text-green-4',
-    Completed: 'text-purple-8',
-  };
 
-  return colorsMapping[status];
-};
-
-// Initial load
 onMounted(async () => {
   await fetchMatches(1);
 });
+
+const handleJoin = (id: number) => {
+  router.push(`/matches/${id}`);
+};
+
 </script>
 
 <template>
@@ -134,7 +138,7 @@ onMounted(async () => {
                 <span>
                   - {{ `${match.playersNumber} vs ${match.playersNumber}` }}</span
                 >
-                <span :class="[getStatusColorClass(match.status), 'q-ml-md']">
+                <span :class="[getStatusColor(match.status), 'q-ml-md']">
                   {{ match.status }}
                 </span>
               </q-item-label>
@@ -146,7 +150,7 @@ onMounted(async () => {
                 lines="1"
                 class="q-mt-xs text-body2 text-weight-bold text-primary text-uppercase"
               >
-                <span class="cursor-pointer">Join</span>
+                <span @click="handleJoin(match.id)" class="cursor-pointer">Join</span>
               </q-item-label>
             </q-item-section>
 
