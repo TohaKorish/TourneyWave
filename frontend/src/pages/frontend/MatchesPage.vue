@@ -84,6 +84,7 @@ const handleSelect = async (newGame: Game) => {
       <q-btn
         fab
         icon="add"
+        label="Add new match"
         color="primary"
         @click="toggleForm"
         size="lg"
