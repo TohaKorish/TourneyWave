@@ -1,3 +1,5 @@
+from multiprocessing.managers import Value
+
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.exceptions.user_banned_error import UserBannedError
@@ -125,6 +127,9 @@ class MatchService:
 
     async def complete_match(self, match_id: int, winner_team_id: int) -> Match:
         match = await self._repository.get_by_id(match_id)
+
+        if match.winner_team_id:
+            raise ValueError('Already has a winner');
 
         match.winner_team_id = winner_team_id
 

@@ -36,10 +36,14 @@ class Match(Base):
     @property
     def status(self) -> MatchStatusEnum:
         if self.datetime < datetime.now():
+            if self.teams[0] != self.players_number and self.teams[1] != self.players_number:
+                return MatchStatusEnum.CANCELED
+
             if self.winner_team_id:
                 return MatchStatusEnum.COMPLETED
-            else:
-                return MatchStatusEnum.IN_PROGRESS
+
+            return MatchStatusEnum.IN_PROGRESS
+
         return MatchStatusEnum.OPEN
 
     # Зв'язок Many-to-One з Game

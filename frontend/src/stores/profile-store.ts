@@ -3,7 +3,7 @@ import { useFetch } from 'src/composables/fetch';
 import { Profile } from 'src/shared.types';
 
 export const useProfile = defineStore('profile', {
-  state: () => ({
+  state: (): Profile => ({
     profile: JSON.parse(localStorage.getItem('profile')) || null,
   }),
   actions: {

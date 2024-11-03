@@ -12,4 +12,4 @@ class UserGame(Base):
     rating = Column(Integer, nullable=False, default=100)
 
     user = relationship('User', back_populates='user_games')
-    game = relationship('Game', back_populates='user_games')
+    game = relationship('Game', back_populates='user_games', lazy='selectin')
