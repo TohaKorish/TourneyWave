@@ -36,7 +36,7 @@ class Match(Base):
     @property
     def status(self) -> MatchStatusEnum:
         if self.datetime < datetime.now():
-            if self.teams[0] != self.players_number and self.teams[1] != self.players_number:
+            if len(self.teams[0].members) != self.players_number or len(self.teams[1].members) != self.players_number:
                 return MatchStatusEnum.CANCELED
 
             if self.winner_team_id:
