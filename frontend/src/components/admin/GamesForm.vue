@@ -142,7 +142,7 @@ const onSubmit = async () => {
     const errorMessage = error.message || 'Failed to create image!';
     Notify.create({
       message: errorMessage,
-      color: 'negative',
+      color: 'warning',
       position: 'top',
     });
   }

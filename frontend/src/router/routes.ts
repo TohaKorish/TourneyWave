@@ -20,8 +20,8 @@ const routes: RouteRecordRaw[] = [
       { path: '/login', component: () => import('pages/frontend/LoginPage.vue'), },
       { path: '/dashboard', component: () => import('pages/frontend/DashboardPage.vue'), meta: { requiresAuth: true, role: 'user' } },
       { path: '/registration', component: () => import('pages/frontend/RegistrationPage.vue'), },
-      { path: '/matches', component: () => import('pages/frontend/MatchesPage.vue'), },
-      { path: '/matches/:id', component: () => import('pages/frontend/MatchRoomPage.vue'), },
+      { path: '/matches', component: () => import('pages/frontend/MatchesPage.vue'), meta: { requiresAuth: true, role: 'user' }},
+      { path: '/matches/:id', component: () => import('pages/frontend/MatchRoomPage.vue'), meta: { requiresAuth: true, role: 'user' }},
     ],
   },
 
