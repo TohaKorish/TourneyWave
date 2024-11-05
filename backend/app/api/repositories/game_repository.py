@@ -37,6 +37,12 @@ class GameRepository:
 
         return game
 
+    async def get_all_games(self) -> list[Game]:
+        stmt = select(Game)
+        games = await self._db.scalars(stmt)
+
+        return games.all()
+
     async def get_by_name(self, name: str) -> Game:
         stmt = select(Game).where(Game.name == name)
         game = await self._db.scalar(stmt)
@@ -45,6 +51,11 @@ class GameRepository:
             raise ModelNotFoundError(Game.__tablename__)
 
         return game
+
+    async def search_by_part_of_name(self, part_of_name: str) -> list[Game]:
+        stmt = select(Game).where(Game.name.icontains(f"%{part_of_name}%"))
+        games = await self._db.scalars(stmt)
+        return games.all()
 
     async def delete_game(self, game_id: int) -> bool:
         game = await self.get_by_id(game_id)

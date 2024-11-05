@@ -27,14 +27,21 @@ POST http://localhost:8000/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "test@gmail.com",
+  "email": "admin@gmail.com",
   "password": "Qwerty123"
 }
 
 ###
 GET http://localhost:8000/api/users/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoidXNlciIsImV4cCI6MTcyOTUzMDk3NX0.zUXC-jZqSVUC-gwPN49qmIWM9C7IKzqOm2_uZwoApcM
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3MzA2ODUwODZ9.4q2XzaJd9oiJlt79zkO3zDYeEwkhPoTA1XhaXIVAtsc
 
+###
+PATCH http://localhost:8000/api/users/ban/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3MzAwMjk2NDl9.EH475Fvpe5wMZCMdQp6U4BnL4TmZW7-lcyXqmb1B55s
+
+###
+PATCH http://localhost:8000/api/users/unban/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3MzAwMjk2NDl9.EH475Fvpe5wMZCMdQp6U4BnL4TmZW7-lcyXqmb1B55s
 
 
 
@@ -53,33 +60,57 @@ Content-Type: application/json
 {
   "name": "Chess",
   "image": "http://example.com/chess.png",
-  "participant_count": {
-    "min": 2,
-    "max": 2
-  }
+  "participant_count": [2]
 }
 ###
 
-GET http://localhost:8000/api/games/1
+GET http://localhost:8000/api/games/3
 ###
+
+
+GET http://localhost:8000/api/games/
+###
+
+GET http://localhost:8000/api/games?search=3
 
 ### Тестування матчів
 POST http://localhost:8000/api/matches
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiYWRtaW4iLCJleHAiOjE3MzA0MzA4OTh9.KqftlA2jSy2YpbymGyoAWZ5e-F3MacWD1SHiBHDMdVI
 Content-Type: application/json
 
 {
-  "datetime": "2024-10-22T15:00:00",
+  "datetime": "2024-11-02T11:00:00",
   "connection_key": "12345",
   "connection_description": "Match description",
   "stream_url": "http://example.com/stream",
   "password": "matchpassword",
-  "game_id": 1,
-  "winner_team_id": null
+  "game_id": 4,
+  "owner_id": 1,
+  "winner_team_id": null,
+  "players_number": 2
 }
 ###
 
 GET http://localhost:8000/api/matches/1
 ###
+
+GET http://localhost:8000/api/matches?status=open
+###
+
+GET http://localhost:8000/api/matches?game_id=1&status=completed
+
+###
+DELETE http://localhost:8000/api/matches/1
+
+###
+PATCH http://localhost:8000/api/matches/join-team/1
+Content-Type: application/json
+
+{
+  "match_id": 2,
+  "team_id": 3,
+  "user_id": 3
+}
 
 ### Тестування команд
 POST http://localhost:8000/api/teams

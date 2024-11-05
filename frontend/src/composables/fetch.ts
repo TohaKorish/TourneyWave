@@ -29,6 +29,9 @@ export async function useFetch(
 
   const responseBody = await resp.json();
 
+  console.log("responseBody");
+  console.log(responseBody);
+
   if (!resp.ok) {
     throw Error(responseBody.detail);
   }

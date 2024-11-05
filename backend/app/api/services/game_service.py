@@ -34,14 +34,27 @@ class GameService:
 
         return game
 
+    async def get_all_games(self) -> list[Game]:
+        games = await self._repository.get_all_games()
+
+        return games
 
     async def get_by_name(self, name: str) -> Game:
         game = await self._repository.get_by_name(name)
 
         return game
 
-    async def update(self, body: GameRequest) -> Game:
-        game = Game(name=body.name, image=body.image, participant_count=body.participant_count)
+    async def search_by_part_of_name(self, name: str) -> list[Game]:
+        games = await self._repository.search_by_part_of_name(name)
+
+        return games
+
+    async def update(self, game_id: int, body: GameRequest) -> Game:
+        game = await self._repository.get_by_id(game_id)
+        game.name = body.name
+        game.participant_count = body.participant_count
+        game.image = body.image
+
         game = await self._repository.update_game(game)
         await self._db.commit()
 

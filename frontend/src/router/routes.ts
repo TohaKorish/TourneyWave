@@ -6,6 +6,9 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/AdminLayout.vue'),
     children: [
       { path: '', component: () => import('pages/admin/AdminDashboard.vue') },
+      { path: 'games', component: () => import('pages/admin/games/GamesListingPage.vue') },
+      { path: 'games/new', component: () => import('pages/admin/games/GamesFormPage.vue') },
+      { path: 'games/edit/:id', component: () => import('pages/admin/games/GamesFormPage.vue') },
     ],
     meta: { requiresAuth: true, role: 'admin' }
   },
@@ -13,21 +16,12 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/LandingPage.vue') },
-      {
-        path: '/login',
-        component: () => import('pages/LoginPage.vue'),
-      },
-      {
-        path: '/dashboard',
-        component: () => import('pages/DashboardPage.vue'),
-        meta: { requiresAuth: true, role: 'user' }
-
-      },
-      {
-        path: '/registration',
-        component: () => import('pages/RegistrationPage.vue'),
-      },
+      { path: '', component: () => import('pages/frontend/LandingPage.vue') },
+      { path: '/login', component: () => import('pages/frontend/LoginPage.vue'), },
+      { path: '/dashboard', component: () => import('pages/frontend/DashboardPage.vue'), meta: { requiresAuth: true, role: 'user' } },
+      { path: '/registration', component: () => import('pages/frontend/RegistrationPage.vue'), },
+      { path: '/matches', component: () => import('pages/frontend/MatchesPage.vue'), meta: { requiresAuth: true, role: 'user' }},
+      { path: '/matches/:id', component: () => import('pages/frontend/MatchRoomPage.vue'), meta: { requiresAuth: true, role: 'user' }},
     ],
   },
 

@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.exceptions.model_not_found_error import ModelNotFoundError
@@ -45,4 +46,20 @@ class UserService:
         user = await self._repository.get_by_email(email)
 
         return user
+
+    async def ban_user(self, user_id: int) -> bool:
+        try:
+            result = await self._repository.ban_user(user_id)
+            await self._db.commit()
+            return result
+        except ModelNotFoundError as e:
+            raise HTTPException(status_code=404, detail=str(e))
+
+    async def unban_user(self, user_id: int) -> bool:
+        try:
+            result = await self._repository.unban_user(user_id)
+            await self._db.commit()
+            return result
+        except ModelNotFoundError as e:
+            raise HTTPException(status_code=404, detail=str(e))
 

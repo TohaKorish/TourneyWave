@@ -10,3 +10,5 @@ aiomysql
 pyjwt
 python-dotenv
 alembic
+fastapi-pagination
+python-multipart

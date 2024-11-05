@@ -1,7 +1,9 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+
 from app.api.exceptions.model_not_found_error import ModelNotFoundError
-from app.api.models import Match
+from app.api.models import Match, Team, User
 
 
 class MatchRepository:
@@ -18,22 +20,41 @@ class MatchRepository:
         return match
 
     async def get_by_id(self, match_id: int) -> Match:
-        stmt = select(Match).where(Match.id == match_id)
+        stmt = select(Match).options(selectinload(Match.teams).selectinload(Team.members).selectinload(User.user_games)).where(Match.id == match_id)
         match = await self._db.scalar(stmt)
 
         if not match:
             raise ModelNotFoundError(Match.__tablename__)
 
-        return match
-
-    async def get_by_name(self, name: str) -> Match:
-        stmt = select(Match).where(Match.name == name)
-        match = await self._db.scalar(stmt)
-
-        if not match:
-            raise ModelNotFoundError(Match.__tablename__)
+        for team in match.teams:
+            for member in team.members:
+                member.user_games = [ug for ug in member.user_games if ug.game_id == match.game_id]
 
         return match
+
+    async def get_by_game_id(self, game_id: int) -> list[Match]:
+        stmt = select(Match).where(Match.game_id == game_id).order_by(Match.datetime.desc())
+        matches = await self._db.scalars(stmt)
+
+        return matches.all()
+
+    async def get_by_status(self, status: str) -> list[Match]:
+        stmt = select(Match).order_by(Match.datetime.desc())
+        matches = await self._db.scalars(stmt)
+
+        return [match for match in matches if match.status.value == status]
+
+    async def get_by_game_id_and_status(self, game_id: int, status: str) -> list[Match]:
+        stmt = select(Match).where(Match.game_id == game_id).order_by(Match.datetime.desc())
+        matches = await self._db.scalars(stmt)
+
+        return [match for match in matches if match.status.value == status]
+
+    async def get_all_matches(self) -> list[Match]:
+        stmt = select(Match).order_by(Match.datetime.desc())
+        matches = await self._db.scalars(stmt)
+
+        return matches.all()
 
     async def delete_match(self, match_id: int) -> bool:
         match = await self.get_by_id(match_id)

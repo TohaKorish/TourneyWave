@@ -1,4 +1,6 @@
 import os
+from typing import Any
+
 import jwt
 from datetime import timedelta, datetime, timezone
 
@@ -29,11 +31,15 @@ class TokenService:
 
         return TokenResponse(access_token=encoded_jwt, token_type="Bearer")
 
-    def validate_token(self, token: str) -> int:
+    def validate_token(self, token: str) -> dict[str, Any]:
         try:
             payload = jwt.decode(token, os.getenv('JWT_SECRET'), algorithms=[os.getenv('ALGORITHM')])
 
-            return payload.get('user_id')
+            return {
+                "user_id": payload.get('user_id'),
+                "role": payload.get('role'),
+
+            }
         except Exception:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

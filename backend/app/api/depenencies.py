@@ -1,20 +1,25 @@
 from functools import lru_cache
-from typing import Annotated
+from typing import Annotated, Any
 
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
 
+from app.api.models.enums import RoleEnum
 from app.api.repositories.game_repository import GameRepository
 from app.api.repositories.match_repository import MatchRepository
 from app.api.repositories.team_repository import TeamRepository
+from app.api.repositories.user_game_repository import UserGameRepository
 from app.api.repositories.user_repository import UserRepository
 from app.api.services.auth_service import AuthService
 from app.api.services.game_service import GameService
+from app.api.services.image_service import ImageService
 from app.api.services.match_service import MatchService
+from app.api.services.rating_service import RatingService
 from app.api.services.team_service import TeamService
 from app.api.services.token_service import TokenService
 from app.api.services.user_service import UserService
-from fastapi import Request, Depends
+from fastapi import Request, Depends, HTTPException
 from passlib.context import CryptContext
 
 
@@ -47,24 +52,38 @@ def get_team_repository(session: AsyncSession = Depends(get_sa_session)) -> Team
 def get_match_repository(session: AsyncSession = Depends(get_sa_session)) -> MatchRepository:
     return MatchRepository(session)
 
+def get_user_game_repository(session: AsyncSession = Depends(get_sa_session)) -> UserGameRepository:
+    return UserGameRepository(session)
+
 
 def get_user_service(session: AsyncSession = Depends(get_sa_session),
                      repo: UserRepository = Depends(get_user_repository),
                      crypt: CryptContext = Depends(get_crypt_context)) -> UserService:
     return UserService(session, repo, crypt)
 
+
 def get_team_service(session: AsyncSession = Depends(get_sa_session),
                      repo: TeamRepository = Depends(get_team_repository),
                      user_repo: UserRepository = Depends(get_user_repository)) -> TeamService:
     return TeamService(session, repo, user_repo)
 
+
 def get_game_service(session: AsyncSession = Depends(get_sa_session),
                      repo: GameRepository = Depends(get_game_repository)) -> GameService:
     return GameService(session, repo)
 
+def get_rating_service(session: AsyncSession = Depends(get_sa_session),
+                     repo: MatchRepository = Depends(get_match_repository),
+                     user_repo: UserRepository = Depends(get_user_repository)) -> RatingService:
+    return RatingService(session, repo, user_repo)
+
 def get_match_service(session: AsyncSession = Depends(get_sa_session),
-                     repo: MatchRepository = Depends(get_match_repository)) -> MatchService:
-    return MatchService(session, repo)
+                     repo: MatchRepository = Depends(get_match_repository),
+                      team_repo: TeamRepository = Depends(get_team_repository),
+                      user_game_repo: UserGameRepository = Depends(get_user_game_repository),
+                      user_repo: UserRepository = Depends(get_user_repository),
+                      rating_service: RatingService = Depends(get_rating_service)) -> MatchService:
+    return MatchService(session, repo, team_repo, user_repo, user_game_repo, rating_service)
 
 
 def get_auth_service(
@@ -77,17 +96,35 @@ def get_auth_service(
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 
-def validate_token(token: Annotated[str, Depends(oauth2_scheme)],
-                   token_service: TokenService = Depends(get_token_service)) -> int:
+def authenticate_by_token(token: Annotated[str, Depends(oauth2_scheme)],
+                          token_service: TokenService = Depends(get_token_service)) -> int:
+    return token_service.validate_token(token)['user_id']
 
-    return token_service.validate_token(token)
 
+def authorize_by_token(token: Annotated[str, Depends(oauth2_scheme)],
+                       token_service: TokenService = Depends(get_token_service)) -> RoleEnum:
+    role = token_service.validate_token(token)['role']
 
+    if role == RoleEnum.USER.value:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Forbidden",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    return role
+
+def get_image_service() -> ImageService:
+    return ImageService()
+
+ImageServiceIoC = Annotated[ImageService, Depends(get_image_service)]
 DBSessionIoC = Annotated[AsyncSession, Depends(get_sa_session)]
 UserServiceIoC = Annotated[UserService, Depends(get_user_service)]
 GameServiceIoC = Annotated[GameService, Depends(get_game_service)]
 TeamServiceIoC = Annotated[TeamService, Depends(get_team_service)]
 MatchServiceIoC = Annotated[MatchService, Depends(get_match_service)]
+RatingServiceIoC = Annotated[RatingService, Depends(get_rating_service)]
 TokenServiceIoC = Annotated[TokenService, Depends(get_token_service)]
 AuthServiceIoC = Annotated[AuthService, Depends(get_auth_service)]
-ValidateTokenIoC = Annotated[int, Depends(validate_token)]
+AuthenticateTokenIoC = Annotated[int, Depends(authenticate_by_token)]
+AuthorizeTokenIoC = Annotated[RoleEnum, Depends(authorize_by_token)]

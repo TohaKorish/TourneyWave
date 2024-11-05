@@ -1,7 +1,11 @@
-from sqlalchemy import select
+from sqlalchemy import select, join
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+
 from app.api.exceptions.model_not_found_error import ModelNotFoundError
-from app.api.models.user import User
+from app.api.models import Team
+from app.api.models.user import User, user_team
+from app.api.models.user_game import UserGame
 
 
 class UserRepository:
@@ -40,5 +44,19 @@ class UserRepository:
     async def delete_user(self, user_id: int) -> bool:
         user = await self.get_by_id(user_id)
         await self._db.delete(user)
+
+        return True
+
+    async def ban_user(self, user_id: int) -> bool:
+        user = await self.get_by_id(user_id)
+        user.is_banned = True
+        await self._db.flush()
+
+        return True
+
+    async def unban_user(self, user_id: int) -> bool:
+        user = await self.get_by_id(user_id)
+        user.is_banned = False
+        await self._db.flush()
 
         return True

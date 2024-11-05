@@ -1,5 +1,3 @@
-from typing import List
-
 from pydantic import BaseModel
 
 
@@ -7,4 +5,4 @@ class GameRequest(BaseModel):
     name: str
     # TODO: some image logic implementation
     image: str
-    participant_count: List[int]
+    participant_count: list[int]
